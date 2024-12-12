@@ -33,12 +33,13 @@ public class StockGenProducer {
         JsonSerializer<Trade> tradeSerializer = new JsonSerializer<>();
 
         // Configuring producer
-        Properties props;
-        if (args.length==1)
-            props = LoadConfigs.loadConfig(args[0]);
-        else
-            props = LoadConfigs.loadConfig();
+        Properties props = new Properties();
+        // if (args.length==1)
+        //     props = LoadConfigs.loadConfig(args[0]);
+        // else
+        //     props = LoadConfigs.loadConfig();
 
+        props.put("bootstrap.servers", "localhost:9092");
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", tradeSerializer.getClass().getName());
 

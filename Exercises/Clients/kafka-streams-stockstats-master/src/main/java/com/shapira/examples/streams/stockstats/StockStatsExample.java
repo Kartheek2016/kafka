@@ -34,12 +34,13 @@ public class StockStatsExample {
 
     public static void main(String[] args) throws Exception {
 
-        Properties props;
-        if (args.length==1)
-            props = LoadConfigs.loadConfig(args[0]);
-        else
-            props = LoadConfigs.loadConfig();
+        Properties props = new Properties();
+        // if (args.length==1)
+        //     props = LoadConfigs.loadConfig(args[0]);
+        // else
+        //     props = LoadConfigs.loadConfig();
 
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "stockstat-2");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, TradeSerde.class.getName());
