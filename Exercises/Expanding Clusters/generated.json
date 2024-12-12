@@ -1,0 +1,53 @@
+{
+    "version": 1,
+    "partitions": [
+        {
+            "topic": "topic_1",
+            "partition": 0,
+            "replicas": [
+                3,
+                4
+            ],
+            "log_dirs": [
+                "any",
+                "any"
+            ]
+        },
+        {
+            "topic": "topic_1",
+            "partition": 1,
+            "replicas": [
+                4,
+                3
+            ],
+            "log_dirs": [
+                "any",
+                "any"
+            ]
+        },
+        {
+            "topic": "topic_2",
+            "partition": 0,
+            "replicas": [
+                3,
+                4
+            ],
+            "log_dirs": [
+                "any",
+                "any"
+            ]
+        },
+        {
+            "topic": "topic_2",
+            "partition": 1,
+            "replicas": [
+                4,
+                3
+            ],
+            "log_dirs": [
+                "any",
+                "any"
+            ]
+        }
+    ]
+}

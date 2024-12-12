@@ -1,0 +1,17 @@
+{
+    "version": 1,
+    "partitions": [
+        {
+            "topic": "topic_1",
+            "partition": 0,
+            "replicas": [
+                3,
+                4
+            ],
+            "log_dirs": [
+                "any",
+                "any"
+            ]
+        }
+    ]
+}
