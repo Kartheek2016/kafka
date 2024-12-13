@@ -72,3 +72,20 @@ keytool -keystore "c:\kafka\conf\certs\kafka.keystore" \
 -noprompt
 
 // Copy and / or move files so that each broker/producer/consumer has access to /home/kafka/conf/certs/
+
+// Then update the server properties fie
+listeners=PLAINTEXT://:9092,CONTROLLER://:9093,SSL://:10092
+advertised.listeners=PLAINTEXT://localhost:9092,CONTROLLER://localhost:9093,SSL://localhost:10092
+
+ssl.keystore.location=/home/zadmin/Documents/kafka/conf/certs/kafka.keystore
+ssl.keystore.password=kafka123
+ssl.key.password=kafka123
+
+ssl.truststore.location=/home/zadmin/Documents/kafka/conf/certs/kafka.truststore
+ssl.truststore.password=kafka123
+
+ssl.client.auth=required
+
+// Use any one
+# inter.broker.listener.name=SSL
+security.inter.broker.protocol=SSL
