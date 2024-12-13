@@ -1,0 +1,74 @@
+CERT_OUTPUT_PATH="c:\kafka\conf\certs"
+KEY_STORE="c:\kafka\conf\certs\kafka.keystore"
+TRUST_STORE="c:\kafka\conf\certs\kafka.truststore"
+PASSWORD="kafka123"
+KEY_KEY_PASS="kafka123"
+KEY_STORE_PASS="kafka123"
+TRUST_KEY_PASS="kafka123"
+TRUST_STORE_PASS="kafka123"
+CLUSTER_NAME="kafka"
+CERT_AUTH_FILE="c:\kafka\conf\certs\ca-cert"
+CLUSTER_CERT_FILE="c:\kafka\conf\certs\kafka-cert"
+D_NAME="CN=CloudDurable Image kafka cluster, OU=Cloudurable, O=Cloudurable, L=San Francisco, ST=CA, C=USA, DC=cloudurable, DC=com"
+DAYS_VALID=365
+
+// Generate cluster certificate in keystore 
+keytool -genkey \
+-keyalg RSA \
+-alias "kafka_cluster" \
+-keystore "c:\kafka\conf\certs\kafka.keystore" \
+-storepass "kafka123" \
+-keypass "kafka123" \
+-dname "CN=CloudDurable Image kafka cluster, OU=Cloudurable, O=Cloudurable, L=San Francisco, ST=CA, C=USA, DC=cloudurable, DC=com" \
+-validity "365"
+
+// Generate Certificate Authority CA
+openssl req -new -x509 \
+-keyout ca-key \
+-out "c:\kafka\conf\certs\ca-cert" \
+-days "365" \
+-passin pass:"kafka123" \
+-passout pass:"kafka123" \
+-subj "/C=US/ST=CA/L=San Francisco/O=Engineering/CN=cloudurable.com"
+
+// Import CA into Kafka's truststore
+keytool -keystore "c:\kafka\conf\certs\kafka.truststore" \
+-alias CARoot \
+-import -file "c:\kafka\conf\certs\ca-cert" \
+-storepass "kafka123" \
+-keypass "kafka123" \
+-noprompt
+
+// Sign cluster certificate with CA
+keytool -keystore "c:\kafka\conf\certs\kafka.keystore" \
+-alias "kafka_cluster" \
+-certreq \
+-file "c:\kafka\conf\certs\kafka-cert" \
+-storepass "kafka123" \
+-keypass "kafka123" \
+-noprompt
+
+openssl x509 -req \
+-CA "c:\kafka\conf\certs\ca-cert" \
+-CAkey ca-key -in "c:\kafka\conf\certs\kafka-cert" \
+-out "c:\kafka\conf\certs\kafka-cert-signed" \
+-days "365" \
+-CAcreateserial \
+-passin pass:"kafka123"
+
+// Import CA and Self signed certificate into Kafka's truststore
+keytool -keystore "c:\kafka\conf\certs\kafka.keystore" \
+-alias CARoot \
+-import -file "c:\kafka\conf\certs\ca-cert" \
+-storepass "kafka123" \
+-keypass "kafka123" \
+-noprompt
+
+keytool -keystore "c:\kafka\conf\certs\kafka.keystore" \
+-alias "kafka_cluster" \
+-import -file "c:\kafka\conf\certs\kafka-cert-signed" \
+-storepass "kafka123" \
+-keypass "kafka123" 
+-noprompt
+
+// Copy and / or move files so that each broker/producer/consumer has access to /home/kafka/conf/certs/
